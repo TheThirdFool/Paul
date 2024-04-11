@@ -129,17 +129,32 @@ In a <a href="https://doi.org/10.1016/j.jenvp.2017.02.001">paper</a> on the impa
 ALL I want to do is have fun and do science. Why is it so hard to find the time to do so? 
 
 <h3>I can tell if a Human wrote this</h3>
-There is this thing called Zipf rule.
+<p>
+There is this thing called Zipf's law. The assertion is that in writing, there is a relationship between the word usage rank and the frequency with which it is used. i.e. The seond most used word will be used half as often as the most used word. The data follows this equation: y = c / (x + b)**a. It has been observed that this is true for almost all sizable human texts. The bible, the complete works of Shakespeare, and my thesis (so far)!<br>
+<br>
+In 2022 OpenAI released the now famous ChatGPT. It is truly spooky - it can write essays, tweets, and blog posts exactly like a human. At least as far as I can tell. However, it is totally unable to do maths, perhaps it is this numerical incompetence that is the issue... For there is an issue! As far as my cursory test has shown, ChatGPT struggles with Zipf's law! Admittedly, this is only based of a short investigation, but this may be a useful tool to identify AI? I asked Chat GPT to write me a series of essays on various random topics in architecture. After a few prompts I got up to (bizzarely) almost exactly as many words as the latest thesis chapter I had finished. So I compared them like for like. I used a short python script I wrote to genearte the dataset and fit it with the Zipf relation. I would like to highlight the "goodness of fit" for these two datasets (shown below). By eye we can say that the ChatGPT plot is less well fit by the line, but in science, we put numbers to these things. The number I am using is the Chi squared of the dataset. This is simply a measure of how likely is it that the fit is wrong rather than the data just looking that way by chance. Here are the two numbers I found: 
+</p>
 
+<ul>
+<li>5527 words, all written by ChatGPT. ChiSq = 0.34</li>
+<li>5526 words, all written by me. ChiSq = 0.06     </li>
+</ul>
 
+<img src="Images/ChatGPT_Zipf.png" alt="ChatGPT Zipf" width="500">
+<img src="Images/Me_Zipf.png" alt="My Zipf" width="500">
 
+<p>
+That means it is more than 5 times more likely that the ChatGPT essay doesn't follow Zipf's law than my chapter! This is quite a change! This can also be read that if we assume that zipf law must be followed for large peices of text written by humans (but not AI), then the essay written by ChatGPT has 34% chance of not being written by a human. For reference, here are three other manuscripts I tested:
+</p>
+<ul>
+<li>My masters thesis: 0.031            </li> 
+<li>6 recent LHCb papers: 0.040         </li>
+<li>The script for "12 angry men": 0.099</li>
+</ul>
 
-
-
-
-
-
-
+<p> 
+All of which have far lower Chi squared values than the ChatGPT essay. Even the largest - 12 angry men - was a factor of three from the heady heights of the chat. Perhaps the take away is that there are ways of identifying AI works, so if you are tempted to phone it in for an essay... Think again.
+</p>
 
 </body>
 </html>
