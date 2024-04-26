@@ -126,82 +126,14 @@ In a <a href="https://doi.org/10.1016/j.jenvp.2017.02.001">paper</a> on the impa
 
 <h1>Post 2 - All I want to do is make fun science things</h1> 
 
-ALL I want to do is have fun and do science. Why is it so hard to find the time to do so? 
-
-<h3>I can tell if a Human wrote this</h3>
-<p>
-There is this thing called Zipf's law. The assertion is that in writing, there is a relationship between the word usage rank and the frequency with which it is used. i.e. The seond most used word will be used half as often as the most used word. The data follows this equation: y = c / (x + b)**a. It has been observed that this is true for almost all sizable human texts. The bible, the complete works of Shakespeare, and my thesis (so far)!<br>
+ALL I want to do is have fun and do science. Why is it so hard to find the time to do so? <br>
 <br>
-In 2022 OpenAI released the now famous ChatGPT. It is truly spooky - it can write essays, tweets, and blog posts exactly like a human. At least as far as I can tell. However, it is totally unable to do maths, perhaps it is this numerical incompetence that is the issue... For there is an issue! As far as my cursory test has shown, ChatGPT struggles with Zipf's law! Admittedly, this is only based of a short investigation, but this may be a useful tool to identify AI? I asked Chat GPT to write me a series of essays on various random topics in architecture. After a few prompts I got up to (bizzarely) almost exactly as many words as the latest thesis chapter I had finished. So I compared them like for like. I used a short python script I wrote to genearte the dataset and fit it with the Zipf relation. I would like to highlight the "goodness of fit" for these two datasets (shown below). By eye we can say that the ChatGPT plot is less well fit by the line, but in science, we put numbers to these things. The number I am using is the Chi squared of the dataset. This is simply a measure of how likely is it that the fit is wrong rather than the data just looking that way by chance. Here are the two numbers I found: 
-</p>
+To see some of my random projects look here:
 
 <ul>
-<li>5527 words, all written by ChatGPT. ChiSq = 0.34</li>
-<li>5526 words, all written by me. ChiSq = 0.06     </li>
+<li><a href="HistoGUI_Description.html">HistoGUI</a> - A custom C++ data plotter.</li>
+<li><a href="ZipfRamble.html">Zipf analysis</a> of human written and ChatGPT written essays.</li>
 </ul>
-
-<img src="Images/ChatGPT_Zipf.png" alt="ChatGPT Zipf" width="500">
-<img src="Images/Me_Zipf.png" alt="My Zipf" width="500">
-
-<p>
-That means it is more than 5 times more likely that the ChatGPT essay doesn't follow Zipf's law than my chapter! This is quite a change! This can also be read that if we assume that zipf law must be followed for large peices of text written by humans (but not AI), then the essay written by ChatGPT has 34% chance of not being written by a human. For reference, here are three other manuscripts I tested:
-</p>
-<ul>
-<li>My masters thesis: 0.031            </li> 
-<li>6 recent LHCb papers: 0.040         </li>
-<li>The script for "12 angry men": 0.099</li>
-</ul>
-
-<p> 
-All of which have far lower Chi squared values than the ChatGPT essay. Even the largest - 12 angry men - was a factor of three from the heady heights of the chat. Perhaps the take away is that there are ways of identifying AI works, so if you are tempted to phone it in for an essay... Think again.
-</p>
-<h3>An update on ChatGPT and Zipf's Law</h3>
-<p>
-I found a <a href="https://doi.org/10.48550/arXiv.2304.12191">paper</a> on if ChatGPT constructed languages follow Zipf law. Here they assert that ChatGPT does indeed follow Zipf's law as the corrolation coefficient of the log(freq) against log(rank) data is close to -1. This assumes a more simple Zipf's relation of 1/x**a. I am not totally convinced that this is a very good method - it seems simplistic and doesn't do a fanstastic job descriminating between random words and written language. Additionally, all the data was using 1000 word stories. As far as I can tell, there is very little other research on the Zipf performance of ChatGPT. This <a href="https://doi.org/10.48550/arXiv.2305.02687">paper</a> raises the possibility of LLMs like ChatGPT being forced to follow a specific formulation of Zipf's law, but I have seen nothing else obvious. <br>
-<br>
-Here is the plan. I will get ChatGPT to write essays based off the topic of 5 recent papers published in "The Historical Journal" from the Cambridge University Press. Then I will see if this allows me to predict if a sixth paper is written by ChatGPT afterwards. All of the papers were published after ChatGPT was compiled so they cannot corrupt the chat.<br>
-<br>
-The small snag is that, unlike history academics, ChatGPT will not write 10,000 words, it'll just write a summary. So instead I ask for 2,000. Mainly it gives me 1000. It can't count. Anyway here are the results:
-</p>
-
-<ul>
-Dhillon H. Imperial Violence, Law, and Compensation in the Age of Empire, 1919–1922. doi:10.1017/S0018246X23000560
-<li>Real = 0.1858 </li>
-<li>Chat = 1.0044 </li>
-</ul>
-
-<ul>
-Zorzi G. Natural Teleology in John Locke’s Ethics. doi:10.1017/S0018246X24000050
-<li>Real = 0.0705</li>
-<li>Chat = 0.0500</li>
-</ul>
-
-<ul>
-Porat D. Plane Hijackings between Cuba and the United States and the Opportunity for Diplomacy (1958–1973). doi:10.1017/S0018246X24000013 
-<li>Real = 0.0407</li>
-<li>Chat = 0.0636</li>
-</ul>
-
-<ul>
-O’Sullivan R. Irish-American Anti-Imperialism in Patrick Ford’s The Criminal History of the British Empire. doi:10.1017/S0018246X24000098
-<li>Real = 0.0477</li>
-<li>Chat = 0.1346</li>
-</ul>
-
-<ul>
-Tait C. Phantoms in and of the Archive: Mary Cudmore’s Encounters with a Ghost in Cork in 1688 and 1689. doi:10.1017/S0018246X24000128
-<li>Real = 0.3076</li>
-<li>Chat = 0.6232</li>
-</ul>
-
-<p>
-This is less convincing. In all but one scenarios, the real writings have a lower chi squared, but this could be partly due to the sample size! The one instance that the chat produces a essay with a lower chi squared is when talking about John Locke. I wonder if this is a product of the breadth of writings about John Locke that is almost certainly in the dataset ChatGPT is trained upon. Perhaps if it knows less about a topic it leans too heavily on a smaller vocabulary, thus pushing it away from the Zipf relation? When looking across the full set of papers, the difference builds.  
-ChatGPT ChiSqu = 3.5324 <br>
-Real ChiSqu = 0.3139 <br>
-</p>
-<img src="Images/ChatGPT_HistoryPapers.png" alt="ChatGPT Zipf" width="500">
-<img src="Images/Real_HistoryPapers.png" alt="Real Zipf" width="500">
-
 
 
 
