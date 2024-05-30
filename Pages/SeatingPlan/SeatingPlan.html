@@ -1,0 +1,60 @@
+<html>
+    <head>
+		<title>Auto Seating Plan</title>
+        <script src="./SeatingPlan.js"></script>
+        <!--<script defer src="./Utilities.js" type="module"></script>-->
+
+		<link rel="stylesheet" href="styles.css">
+
+    </head>
+<body>
+
+	<button onclick="MakeList()">Make test list</button><br>
+
+	<form autocomplete="off" onclick="ShowLikes()">
+		<div class="autocomplete" style="width:300px;">
+		<input id="myInput" type="text" name="LikesThing" placeholder="PersonName">
+		</div>
+		<!--<input type="submit">-->	
+		<ul id="LikeListDiv"    class="Likes">   </ul>
+		<ul id="DislikeListDiv" class="Dislikes"></ul>
+        <!--<button type="button" onclick="ShowLikes()">ShowLikes</button>-->
+	</form>
+	<script>
+		autocomplete(document.getElementById("myInput"),          AllGuests);
+	</script>
+
+
+
+	<button type="button" onclick="ShowObject('AddLikePromptForm', 'AddLikePromt')">Add like</button>
+	<form autocomplete="off" onsubmit="return AddLike();" id="AddLikePromptForm">
+		<div class="autocomplete" style="width:300px;">
+		<input id="AddLikePromt" type="text" name="LikesThing2" placeholder="Liked guest">
+		</div>
+		<input type="submit">	
+	</form>	
+
+
+	<button type="button" onclick="ShowObject('AddDislikePromptForm', 'AddDislikePrompt')">Add dislike</button>
+	<form autocomplete="off" onsubmit="return AddDislike();" id="AddDislikePromptForm">
+		<div class="autocomplete" style="width:300px;">
+		<input id="AddDislikePrompt" type="text" name="LikesThing3" placeholder="Disliked Guest">
+		</div>
+		<input type="submit">	
+	</form>
+
+
+
+	<form autocomplete="off" onsubmit="return AddGuest();">
+		<input id="AddGuestName" type="text" name="LikesThing" placeholder="Guest Name">
+		<button type="button" onclick="AddGuest()">Add guest</button>
+		</div>
+	</form>
+
+	<button onclick="ListNames()">Show guests</button><br>
+
+	<ul id="FullList"></ul>
+
+</body>
+
+</html>
