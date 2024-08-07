@@ -401,6 +401,56 @@ function AddGuest(){
 	return false;
 }
 
+
+
+
+
+
+
+
+function DrawTablePlan(){
+
+	const canvas = document.getElementById("tablePlanCanvas");
+	const ctx = canvas.getContext("2d");
+	
+	ctx.beginPath();
+	
+	// Set start-point
+	ctx.moveTo(20,20);
+	
+	// Set sub-points
+	ctx.lineTo(100,20);
+	ctx.lineTo(175,100);
+	ctx.lineTo(20,100);
+	
+	// Set end-point
+	ctx.lineTo(20,20);
+	
+	// Stroke it (do the drawing)
+	ctx.stroke();
+
+	ctx.beginPath();
+	
+	// Set start-point
+	ctx.moveTo(10,10);
+	
+	// Set sub-points
+	ctx.lineTo(180,10);
+	ctx.lineTo(180,30);
+	
+	// Set end-point
+	ctx.lineTo(10,10);
+	
+	// Stroke it (do the drawing)
+	ctx.stroke();
+
+}
+
+
+
+
+
+
 //=============================================================================================
 //=============================================================================================
 //=============================================================================================
@@ -520,4 +570,17 @@ function ShowObject(ElementID, InputElementID) {
 
 	autocomplete(document.getElementById(InputElementID),    AllGuests);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
