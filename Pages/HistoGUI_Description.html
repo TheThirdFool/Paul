@@ -21,7 +21,7 @@ With a background in high energy physics, the main analysis and plotting tools I
 <br>
 As a result, along with some friends, I started to develop an alternative analysis package <b>HistoMaster</b>. This package was mainly focussed on reading and analysing the compressed ROOT files, a task it has only been partially successful at. However, in the process of developing this, I realised I needed a native C++ plotter. It was here that I started working on <b>HistoGUI</b>.<br>
 <br>
-<b>HistoGUI</b> solves the major issues that come with displaying data in C++. The graphics are provided by interfacing directly with X11 protocols. It is fairly uncommon to come across Linux computers without X11 support, and any user who wishes to do anything over an ssh connection will have it installed also. This safe bet means usage is very streamlined, with only the header file needing to be referenced in the C++ script. The HistoGUI object can be called, filled with data, and then drawn through some very simple commands. Windows are interactive and can be used to trigger an update of the data through a user defined function. This allows for autorefreshing of the data and a live-plotting option.<br>
+<b>HistoGUI</b> solves the major issues that come with displaying data in C++. The graphics are provided by interfacing directly with X11 protocols. It is fairly uncommon to come across Linux computers without X11 support, and any user who wishes to do anything over an ssh connection will have it installed also. This safe bet means usage is very streamlined, with only the header file needing to be referenced in the C++ script. The HistoGUI object can be called, filled with data, and then drawn through some very simple commands. Windows are interactive and can be used to trigger an update of the data through a user defined function. This allows for autorefreshing of the data and a live-plotting option. Native low level <a href="Fitting.html">fitting</a> has been implemented, enabling fast data analysis.<br>
 <br>
 Additionally, by interfacing with X11 natively, the program is pretty robust to ssh connections, with it indroducing very little response delay. This is particularly useful as one of the major usecases is as data monitoring on a aquesition PC. These PCs are rarely burdoned with ROOT and mainly provide a real delay to real-time data monitoring. However, <b>HistoGUI</b> can help with this.
 </p>
@@ -32,6 +32,7 @@ Just go to the <a href="https://github.com/TheThirdFool/HistoGUI">github reposit
 
 <img src="../Images/1D_Plot.png" alt="HistoGUI 1D plot" width="500">
 <img src="../Images/2D_Plot.png" alt="HistoGUI 2D plot" width="500">
+<img src="../Images/HistoGUI_Fitting.png" alt="HistoGUI native fitting a Gaussian" width="500">
 
 
 

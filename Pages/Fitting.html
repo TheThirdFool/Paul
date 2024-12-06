@@ -1,0 +1,87 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dan's Internet Vibes - HistoGUI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="curve, fitting, minimisation, non-linear least squares, fit">
+</head>
+<body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+<h1>HistoGUI native fitting</h1>
+<p>
+While developing <a href="HistoGUI_Description.html">HistoGUI</a>, I was committed to adding a native fitting procedure to enable simple and easy data analysis. I had an image of with two clicks quickly fitting live data as a monitoring tool. There are so many instances where this would be profoundly useful. In my research, the most used function is that of the Gaussian distribution, as a result this was the fit I implemented first. In this post I will describe in detail how I did this and hopefully shed light on how fitting is carried out in all your favourite analysis programs!
+</p>
+<h3>Non-linear least squares</h3>
+<p>
+The problem we are trying to solve is one of non-linear least squares regression. This is finding a function \(\hat{y}=f(x,\boldsymbol{\beta})\) that best fits a dataset of \(m\) points \((x_1, y_1)...(x_m,y_m)\). Where best is defined as minimising the squared residuals:
+
+$${S = \sum_{i=1}^{m}r_i^2}$$
+
+The function is defined by a set of \(n\) parameters \(\boldsymbol{\beta} = \beta_1, \beta_2, ..., \beta_n\). In the Gaussian's case these are the distribution mean \(\mu\), sigma \(\sigma\), and scale factor \(a\). These are parameters in the function described below. 
+
+$$f(x, \boldsymbol{\beta}) = a \cdot e^{\frac{-(x-\mu)^2}{2\sigma^2}}$$
+
+$$ \boldsymbol{\beta} = \begin{pmatrix} \mu \\ \sigma \\ a \end{pmatrix} $$
+
+Once the parameters are optimised to minimise the squared residuals \(S\) the data is considered to be successfully fitted. However, determining the optimal parameters is not trivial, to do so we must imploy an optimisation algorithm.
+</p>
+<h3>Newton-Guass algorithm</h3>
+<p>
+There are several different alogrithms that can be applied to solve a non-linear least squares problem. An effective (read most simple) method is the Newton-Gauss algorithm. This iteratively applies corrections on some first guesses, updating the parameters until it converges on a good fit. This method relies on the calculation of the Jacobean matrix. This is the only component of the methodology that must be specified for each new fit function.<br>
+<br>
+The Jacobean \(\mathbf{J}\) is an \(n \times m\) matrix where each entry is defined as:
+
+$$(\mathbf{J})_{ij} = \frac{\partial r_i(\boldsymbol{\beta})}{\partial\beta_j}$$
+
+In other words, each column corresponds to a data point \(x_i\), and the entries for each row is the evaluation at \(x_i\) of the partial derivative of the fit function with respect to a parameter \(\beta_j\). To do this for the Gaussian function \(f(x, \boldsymbol{\beta})\), the three partial derivatives are used:
+
+$$
+\begin{align}
+\frac{\partial f(x, \boldsymbol{\beta})}{\partial \mu}    &= f(x,  \boldsymbol{\beta}) \cdot \frac{x - \mu}{\sigma^2}\\
+\frac{\partial f(x, \boldsymbol{\beta})}{\partial \sigma} &= f(x,  \boldsymbol{\beta}) \cdot \frac{(-\mu - \sigma + x)(-\mu + \sigma + x)}{\sigma^3}\\
+\frac{\partial f(x, \boldsymbol{\beta})}{\partial a}      &= f(x,  \boldsymbol{\beta}) \cdot \frac{1}{a}\\
+\end{align}
+$$
+
+Again, these will change for each fit function, but this is the only bit that needs changing for a new function. To use the Jacobean to calculate the next set of parameters \(\boldsymbol{\beta}\) we must apply this iterative function:
+
+$$\boldsymbol{\beta}^{(s+1)} = \boldsymbol{\beta}^{(s)} + \left(\mathbf{J}^T \mathbf{J}\right)^{-1} \mathbf{J}^T\ r\left(\boldsymbol{\beta}^{(s)}\right)$$
+
+(N.B. I did this in the HistoGUI code using \(\mathbf{J}_r = -\mathbf{J}\) and the appropriately transformed function, but the maths is equivilent.) This series of matrix operations means that we are multiplying the Jacobean by it's transpose, this conveniently leaves us with a \(n\times n\) matrix, requiring far less memory to store than the full Jacobean of a large dataset. For this reason I calculate \((\mathbf{J}^T \mathbf{J})\) in one step. This leaves us with a \(3\times 3)\) matrix for the gaussian function. It is this that we find the inverse of. <br>
+<br>
+As everyone who has gone through the fairly involved process of finding an inverse of a matrix will tell you, it is not trivial to implement this on paper, let alone in code. However there are methods available...
+</p>
+<!--
+This function produces a column vector from \(\mathbf{J}^T\ r\left(\boldsymbol{\beta}^{(s)}\right)\) as \(r\left(\boldsymbol{\beta}^{(s)}\right)\) is a column vector of the residuals for each data point \((x_i, y_i)\).
+-->
+<h3>Cholesky decomposition</h3>
+<p>
+To algorithmically determine the solution of a Newton-Gauss step, I used a Cholesky decomposition to find the inverse of the square matrix \((\mathbf{J}^T \mathbf{J})\). The explanation of this is entirely out of the scope of this document, although well covered by the typically excellent <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">wikipedia</a>. In the wikipedia article there is also a code snippet for producing a Cholesky decomposition that I simply added to my code:
+<pre><code>
+for (i = 0; i < dimensionSize; i++) {
+    for (j = 0; j <= i; j++) {
+        float sum = 0;<br>
+        for (k = 0; k < j; k++)
+            sum += L[i][k] * L[j][k];
+
+        if (i == j)<br>
+            L[i][j] = sqrt(M[i][i] - sum);
+        else<br>
+            L[i][j] = (1.0 / L[j][j] * (M[i][j] - sum));
+    }
+}
+</code></pre>
+This generates a triangle matrix \(\mathbf{L}\) from the input \(\mathbf{M} = (\mathbf{J}^T \mathbf{J})\). This triangluar matrix can be used to solve the Newton-Gauss step through two steps.<br>
+<br>
+The algorithm step is rewritten as:
+
+$$ \left(\mathbf{J}^T \mathbf{J}\right) \Delta = \mathbf{J}^T\ r\left(\boldsymbol{\beta}^{(s)}\right)$$
+
+Where \(\Delta = \boldsymbol{\beta}^{(s+1)} - \boldsymbol{\beta}^{(s)}\). This has the form \(\mathbf{M}\mathbf{x} = \mathbf{b}\). The decomposition triangle matrix \(\mathbf{L}\) can be used to solve \(\mathbf{L}\mathbf{y} = \mathbf{b}\) with forward substitution. Then \(\mathbf{x}\) can be found with \(\mathbf{L}^{\dagger}\mathbf{x} = \mathbf{y}\) through backwards substitution. This leaves us with a column vector that contains the changes for each of the parameters \(\boldsymbol{\beta}\). This is basically the solution.<br>
+<br>
+Now we have the paramter corrections from the Newton-Gauss method, we can apply them to the parametrs \(\boldsymbol{\beta}\) and iterate! Eventually the residuals squared \(S\) will converge and we have our solution.
+</p>
+
+
